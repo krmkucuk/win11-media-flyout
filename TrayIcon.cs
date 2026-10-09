@@ -51,8 +51,11 @@ namespace MediaFlyout
             var showPreview = _showPreview;
             var settingsChanged = _settingsChanged;
 
-            foreach (ToolStripItem old in _menu.Items) old.Dispose();
+            // Disposing an item removes it from Items, so iterate over a copy.
+            var oldItems = new ToolStripItem[_menu.Items.Count];
+            _menu.Items.CopyTo(oldItems, 0);
             _menu.Items.Clear();
+            foreach (var old in oldItems) old.Dispose();
 
             _menu.Items.Add(Item(Strings.Preview, (_, _) => showPreview()));
             _menu.Items.Add(new ToolStripSeparator());
